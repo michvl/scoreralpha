@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">scoreralpha</string>
+
+
+<string-array name="array">
+    <item>Ranking ogólny</item>
+    <item>Król strzelców</item>
+    <item>Najlepsza forma</item>
+    <item>Najmniej bramek</item>
+</string-array>
+</resources>
