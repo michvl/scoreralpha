@@ -5,7 +5,7 @@ package com.example.michal.scoreralpha;
  */
 
 public class Player {
-    public int id;
+    public long id;
     public String name;
     public int wins;
     public int loses;
@@ -15,9 +15,9 @@ public class Player {
     public int goalsShot;
     public int goalsLost;
 
-    public Player(String name){
+    public Player(long id, String name){
         this.name = name;
-        this.id = 1;
+        this.id = id;
         this.loses=0;
         this.wins=0;
         this.points=0;

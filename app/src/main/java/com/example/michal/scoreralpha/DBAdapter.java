@@ -2,6 +2,7 @@ package com.example.michal.scoreralpha;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -43,11 +44,11 @@ public class DBAdapter {
     public static final String MATCHES_OPTIONS = "INTEGER DEFAULT 0";
     public static final int MATCHES_COLUMN = 5;
 
-    public static final String KEY_GOALSSHOT = "goals shot";
+    public static final String KEY_GOALSSHOT = "goalsshot";
     public static final String GOALSSHOT_OPTIONS = "INTEGER DEFAULT 0";
     public static final int GOALSSHOT_COLUMN = 6;
 
-    public static final String KEY_GOALSLOST = "goals lost";
+    public static final String KEY_GOALSLOST = "goalslost";
     public static final String GOALSLOST_OPTIONS = "INTEGER DEFAULT 0";
     public static final int GOALSLOST_COLUMN = 7;
 
@@ -113,10 +114,46 @@ public class DBAdapter {
         dbHelper.close();
     }
 
-    public long insertScore(String name){
+    public long insertPlayer(String name){
         ContentValues newScoreValues = new ContentValues();
         newScoreValues.put(KEY_NAME, name);
         return db.insert(DB_SCORE_TABLE, null, newScoreValues);
+    }
+
+    public Cursor getAllPlayers(){
+        String[] columns = {KEY_ID, KEY_NAME, KEY_POINTS};
+        return db.query(DB_SCORE_TABLE, columns, null,null,null,null,null);
+    }
+
+    public Player getPlayer(long id){
+        String[] columns = {KEY_ID, KEY_NAME, KEY_POINTS};
+        String where = KEY_ID + "=" + id;
+        Cursor cursor = db.query(DB_SCORE_TABLE, columns, where, null, null, null, null);
+        Player player = null;
+        if(cursor!=null && cursor.moveToFirst()){
+            String name = cursor.getString(NAME_COLUMN);
+            player = new Player(id, name);
+        }
+        return player;
+    }
+
+    public boolean updatePlayer(Player player){
+        long id = player.id;
+        String name = player.name;
+        return updatePlayer(id, name);
+    }
+
+    public boolean updatePlayer(long id, String name){
+        String where = KEY_ID + "=" + id;
+        ContentValues updatePlayerValues = new ContentValues();
+        updatePlayerValues.put(KEY_NAME, name);
+
+        return db.update(DB_SCORE_TABLE, updatePlayerValues, where, null) > 0;
+    }
+
+    public boolean deletePlayer(long id){
+        String where = KEY_ID + "=" + id;
+        return db.delete(DB_SCORE_TABLE, where, null) > 0;
     }
 
 }
